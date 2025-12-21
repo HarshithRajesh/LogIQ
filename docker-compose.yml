@@ -1,40 +1,26 @@
 version: '3.8'
 
 services:
-  postgres:
+  db:
     image: postgres:15-alpine
-    container_name: logiq_postgres
+    container_name: logiq_db
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: logiq
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./database/init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d logiq"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana-oss
     container_name: logiq_grafana
     ports:
       - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_ADMIN_USER=admin
-    volumes:
-      - grafana_data:/var/lib/grafana
     depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
+      - db
 
 volumes:
-  grafana_data:
-
+  postgres_data:
