@@ -47,7 +47,7 @@ func main() {
 	for scanner.Scan() {
 		lineCount++
 		rawLog := scanner.Text()
-		template := drain.Parse(rawLog)
+		_, template := drain.Parse(rawLog)
 
 		batch = append(batch, LogData{Content: rawLog, Template: template})
 
@@ -86,4 +86,3 @@ func sendBatch(logs []LogData) {
 	jsonData, _ := json.Marshal(logs)
 	http.Post(ServerURL, "application/json", bytes.NewBuffer(jsonData))
 }
-

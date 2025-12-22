@@ -10,7 +10,17 @@ CREATE TABLE IF NOT EXISTS anomalies (
     detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     log_count INT,
     description TEXT,
-    deviation_score FLOAT
+    deviation_score FLOAT,
+    -- Optional manual label for evaluation (true anomaly vs false alarm)
+    is_true BOOLEAN
+);
+
+-- Persistent record of templates we've already seen at least once.
+-- This lets pattern anomalies fire only the first time a template appears,
+-- even across restarts.
+CREATE TABLE IF NOT EXISTS known_templates (
+    template TEXT PRIMARY KEY,
+    first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Index for faster time-based querying

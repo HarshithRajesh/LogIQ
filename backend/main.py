@@ -5,7 +5,7 @@ import psycopg2
 from psycopg2.extras import execute_values
 import uvicorn
 import sys
-
+import numpy as np
 app = FastAPI()
 
 # --- CONFIGURATION ---
