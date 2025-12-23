@@ -65,8 +65,8 @@ def analyze():
                 z_score = float((current_count - mean) / effective_std)
                 
                 print(f"\n🚨 ANOMALY DETECTED! 🚨")
-                print(f"   Actual Traffic: {current_count} logs/2s")
-                print(f"   Expected Max:   {int(threshold)} logs/2s")
+                print(f"   Actual Traffic: {current_count} logs/s")
+                print(f"   Expected Max:   {int(threshold)} logs/s")
                 print(f"   Deviation:      {z_score:.2f}x Sigma")
                 
                 # Log to DB
