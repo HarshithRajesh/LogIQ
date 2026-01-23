@@ -6,7 +6,7 @@ services:
     container_name: logiq_db
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: logiq
     ports:
       - "5432:5432"
@@ -14,13 +14,25 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
 
+  # grafana:
+  #   image: grafana/grafana-oss
+  #   container_name: logiq_grafana
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - db
   grafana:
-    image: grafana/grafana-oss
-    container_name: logiq_grafana
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
+      image: grafana/grafana:latest
+      container_name: logiq_grafana
+      ports:
+        - "3000:3000"
+      volumes:
+        # THIS LINE SAVES YOUR DASHBOARD FOREVER
+        - ./grafana_data:/var/lib/grafana  
+      depends_on:
+        - db
+      environment:
+        - GF_SECURITY_ADMIN_PASSWORD=admin
 
 volumes:
   postgres_data:

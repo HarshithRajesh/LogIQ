@@ -14,7 +14,7 @@ import sys
 # --- CONFIGURATION ---
 WINDOW_SIZE = 10
 CHECK_INTERVAL = 2
-SIGMA_MULTIPLIER = 4
+SIGMA_MULTIPLIER = 3
 LEARNING_WINDOWS = 5   # Number of windows to learn baseline
 
 history = deque(maxlen=WINDOW_SIZE)

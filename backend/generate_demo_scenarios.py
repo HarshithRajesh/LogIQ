@@ -142,128 +142,147 @@ def generate_cascading_failure(count):
 def demo1_volume_ddos():
     """
     Demo 1: Volume-based DDoS Attack
-    Normal → Volume Attack (high frequency spike) → Normal
+    STABLE Learning Phase → Normal → Volume Attack → Normal → Attack → Normal
+    
+    Key: Learning phase has STABLE, CONSISTENT traffic
+    (1000 logs × 10ms/log = 100 logs/sec for 10 seconds = 1000 logs stable)
     """
     logs = []
     
-    # Phase 1: Normal baseline (3000 logs at ~100 logs/sec = stable baseline for learning)
-    logs.extend(generate_normal_logs(3000))
+    # Phase 1: STABLE LEARNING baseline (1000 logs at stable ~100 logs/sec)
+    # This will be the learning phase: 1000 logs at constant rate
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 2: First attack - Volume DDoS (1000 logs at high speed)
-    logs.extend(generate_volume_attack(1000))
-    
-    # Phase 3: Back to normal (2000 logs)
-    logs.extend(generate_normal_logs(2000))
-    
-    # Phase 4: Second attack - Volume DDoS again (1000 logs)
-    logs.extend(generate_volume_attack(1000))
-    
-    # Phase 5: Normal recovery (1500 logs)
+    # Phase 2: Normal continued (1500 logs) - same rate as learning
     logs.extend(generate_normal_logs(1500))
+    
+    # Phase 3: First attack - Volume DDoS (1200 logs at high speed - SPIKE!)
+    logs.extend(generate_volume_attack(1200))
+    
+    # Phase 4: Back to normal (1500 logs)
+    logs.extend(generate_normal_logs(1500))
+    
+    # Phase 5: Second attack - Volume DDoS again (1200 logs)
+    logs.extend(generate_volume_attack(1200))
+    
+    # Phase 6: Normal recovery (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
     return logs
 
 def demo2_brute_force_attack():
     """
     Demo 2: Brute Force / Credential Stuffing Attack
-    Normal → Brute Force Attack → Normal → Resource Exhaustion → Normal
+    STABLE Learning → Normal → Brute Force → Normal → Resource Exhaustion → Normal
     """
     logs = []
     
-    # Phase 1: Normal baseline (2000 logs)
-    logs.extend(generate_normal_logs(2000))
+    # Phase 1: STABLE LEARNING baseline (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 2: Brute force attack (800 logs)
-    logs.extend(generate_brute_force_attack(800))
-    
-    # Phase 3: Back to normal (1500 logs)
+    # Phase 2: Normal continued (1500 logs)
     logs.extend(generate_normal_logs(1500))
     
-    # Phase 4: Resource exhaustion attack (700 logs)
-    logs.extend(generate_resource_exhaustion(700))
+    # Phase 3: Brute force attack (1000 logs - SPIKE!)
+    logs.extend(generate_brute_force_attack(1000))
     
-    # Phase 5: Normal recovery (1500 logs)
+    # Phase 4: Back to normal (1500 logs)
     logs.extend(generate_normal_logs(1500))
+    
+    # Phase 5: Resource exhaustion attack (800 logs)
+    logs.extend(generate_resource_exhaustion(800))
+    
+    # Phase 6: Normal recovery (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
     return logs
 
 def demo3_pattern_anomaly():
     """
     Demo 3: Pattern Anomaly / SQL Injection Attack
-    Normal → Pattern Anomaly → Normal → Cascading Failure → Normal
+    STABLE Learning → Normal → Pattern Anomaly → Normal → Cascading Failure → Normal
     """
     logs = []
     
-    # Phase 1: Normal baseline (2000 logs)
-    logs.extend(generate_normal_logs(2000))
+    # Phase 1: STABLE LEARNING baseline (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 2: Pattern anomaly attack (800 logs)
-    logs.extend(generate_pattern_anomaly(800))
-    
-    # Phase 3: Back to normal (1500 logs)
+    # Phase 2: Normal continued (1500 logs)
     logs.extend(generate_normal_logs(1500))
     
-    # Phase 4: Cascading failure attack (600 logs)
-    logs.extend(generate_cascading_failure(600))
+    # Phase 3: Pattern anomaly attack (1000 logs - new templates!)
+    logs.extend(generate_pattern_anomaly(1000))
     
-    # Phase 5: Normal recovery (1500 logs)
+    # Phase 4: Back to normal (1500 logs)
     logs.extend(generate_normal_logs(1500))
+    
+    # Phase 5: Cascading failure attack (800 logs)
+    logs.extend(generate_cascading_failure(800))
+    
+    # Phase 6: Normal recovery (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
     return logs
 
 def demo4_mixed_attacks():
     """
     Demo 4: Mixed Attack Scenario
-    Normal → Volume DDoS → Normal → Brute Force → Normal → Resource Exhaustion → Normal
+    STABLE Learning → Normal → Volume → Normal → Brute Force → Normal → Resource Exhaustion → Normal
     """
     logs = []
     
-    # Phase 1: Normal baseline (1500 logs)
-    logs.extend(generate_normal_logs(1500))
+    # Phase 1: STABLE LEARNING baseline (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 2: Volume attack (600 logs)
-    logs.extend(generate_volume_attack(600))
+    # Phase 2: Normal period (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 3: Normal period (1200 logs)
-    logs.extend(generate_normal_logs(1200))
+    # Phase 3: Volume attack (800 logs - SPIKE 1)
+    logs.extend(generate_volume_attack(800))
     
-    # Phase 4: Brute force attack (600 logs)
-    logs.extend(generate_brute_force_attack(600))
+    # Phase 4: Normal period (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 5: Normal period (1200 logs)
-    logs.extend(generate_normal_logs(1200))
+    # Phase 5: Brute force attack (800 logs - SPIKE 2)
+    logs.extend(generate_brute_force_attack(800))
     
-    # Phase 6: Resource exhaustion (500 logs)
-    logs.extend(generate_resource_exhaustion(500))
+    # Phase 6: Normal period (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 7: Normal recovery (1400 logs)
-    logs.extend(generate_normal_logs(1400))
+    # Phase 7: Resource exhaustion (800 logs - SPIKE 3)
+    logs.extend(generate_resource_exhaustion(800))
+    
+    # Phase 8: Normal recovery (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
     return logs
 
 def demo5_sophisticated_attack():
     """
     Demo 5: Sophisticated Multi-Vector Attack
-    Normal → [Volume + Pattern Anomaly] → Normal → [Brute Force + Resource Exhaustion] → Normal
+    STABLE Learning → Normal → [Volume + Pattern] → Normal → [Brute Force + Resource] → Normal
     """
     logs = []
     
-    # Phase 1: Normal baseline (1500 logs)
-    logs.extend(generate_normal_logs(1500))
+    # Phase 1: STABLE LEARNING baseline (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 2: First sophisticated attack (volume + patterns)
-    logs.extend(generate_volume_attack(400))
-    logs.extend(generate_pattern_anomaly(400))
+    # Phase 2: Normal period (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 3: Normal period (1200 logs)
-    logs.extend(generate_normal_logs(1200))
+    # Phase 3: First sophisticated multi-vector attack
+    logs.extend(generate_volume_attack(500))           # Volume spike
+    logs.extend(generate_pattern_anomaly(500))         # + new patterns
     
-    # Phase 4: Second sophisticated attack (brute force + resource exhaustion)
-    logs.extend(generate_brute_force_attack(400))
-    logs.extend(generate_resource_exhaustion(400))
+    # Phase 4: Normal period (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
-    # Phase 5: Normal recovery (1500 logs)
-    logs.extend(generate_normal_logs(1500))
+    # Phase 5: Second sophisticated multi-vector attack
+    logs.extend(generate_brute_force_attack(500))      # Brute force
+    logs.extend(generate_resource_exhaustion(500))     # + resource exhaustion
+    
+    # Phase 6: Normal recovery (1000 logs)
+    logs.extend(generate_normal_logs(1000))
     
     return logs
 
